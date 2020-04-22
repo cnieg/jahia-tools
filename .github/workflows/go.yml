@@ -22,31 +22,31 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
           body: |
-            Jahia Tools version ${{ github.ref }}
+            Jahia Tools version ${{ github.sha }}
           draft: false
           prerelease: false
 
-      - name: Upload linux_x64 Release Asset
+      - name: Upload Linux Release Asset
         id: upload-linux-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .releases/jahia-tools_linux_amd64.zip
-          asset_name: jahia-tools_linux_amd64.zip
-          asset_content_type: application/zip
+          asset_path: /github/workspace/.release/jahia-tools_linux_amd64
+          asset_name: jahia-tools_linux_amd64
+          asset_content_type: application/octet-stream
 
-      - name: Upload win_x64 Release Asset
+      - name: Upload Windows Release Asset
         id: upload-windows-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .releases/jahia-tools_windows_amd64.zip
-          asset_name: jahia-tools_windows_amd64.zip
-          asset_content_type: application/zip
+          asset_path: /github/workspace/.release/jahia-tools_windows_amd64
+          asset_name: jahia-tools_windows_amd64
+          asset_content_type: application/octet-stream
