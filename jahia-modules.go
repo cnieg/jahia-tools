@@ -104,7 +104,7 @@ func splitModuleId(moduleId string) (string, string, string) {
 
 func install(connectInfo jahiaConnectInfo, moduleFile string, startModule bool) {
 	if moduleFile == "" {
-		log.Fatal("Parameter moduleFile is mandatory")
+		log.Fatal("Parameter file is mandatory")
 	}
 	if !fileExists(moduleFile) {
 		log.Fatal("Module file ", moduleFile, " not exist")

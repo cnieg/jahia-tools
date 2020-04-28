@@ -20,7 +20,24 @@ type jahiaConnectInfo struct {
 }
 
 func get(connectInfo jahiaConnectInfo, url string) (map[string]interface{}, error) {
-	req, err := http.NewRequest("GET", connectInfo.url + url, nil)
+	req, err := http.NewRequest("GET", connectInfo.url+url, nil)
+	req.SetBasicAuth(connectInfo.user, connectInfo.password)
+
+	cli := &http.Client{}
+	resp, err := cli.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 200 {
+		return nil, errors.New(parseBody(resp).String())
+	}
+	defer resp.Body.Close()
+
+	return parseJsonBody(resp)
+}
+
+func delete(connectInfo jahiaConnectInfo, url string) (map[string]interface{}, error) {
+	req, err := http.NewRequest("DELETE", connectInfo.url+url, nil)
 	req.SetBasicAuth(connectInfo.user, connectInfo.password)
 
 	cli := &http.Client{}
@@ -37,7 +54,7 @@ func get(connectInfo jahiaConnectInfo, url string) (map[string]interface{}, erro
 }
 
 func post(connectInfo jahiaConnectInfo, url string) (map[string]interface{}, error) {
-	req, err := http.NewRequest("POST", connectInfo.url + url, nil)
+	req, err := http.NewRequest("POST", connectInfo.url+url, nil)
 	req.SetBasicAuth(connectInfo.user, connectInfo.password)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
@@ -55,7 +72,7 @@ func post(connectInfo jahiaConnectInfo, url string) (map[string]interface{}, err
 }
 
 func downloadFile(connectInfo jahiaConnectInfo, filepath string, url string) error {
-	req, err := http.NewRequest("GET", connectInfo.url + url, nil)
+	req, err := http.NewRequest("GET", connectInfo.url+url, nil)
 	req.SetBasicAuth(connectInfo.user, connectInfo.password)
 
 	cli := &http.Client{}
@@ -101,7 +118,7 @@ func postFile(connectInfo jahiaConnectInfo, url string, params map[string]string
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", connectInfo.url + url, body)
+	req, err := http.NewRequest("POST", connectInfo.url+url, body)
 	req.SetBasicAuth(connectInfo.user, connectInfo.password)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	if err != nil {
