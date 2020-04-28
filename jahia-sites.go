@@ -28,12 +28,12 @@ func importSite(info jahiaConnectInfo, file string) {
 
 	log.Println("Import site " + info.siteKey)
 	extraParams := map[string]string{"site": info.siteKey}
-	_, err := postFile(info, importSiteUrl, extraParams, "file", file)
+	result, err := postFile(info, importSiteUrl, extraParams, "file", file)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("Import successful")
+	log.Println(result["message"])
 }
 
 func remove(info jahiaConnectInfo) {
@@ -47,5 +47,4 @@ func remove(info jahiaConnectInfo) {
 	}
 
 	log.Println(result["message"])
-	log.Println("Export successful")
 }
